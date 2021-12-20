@@ -1,11 +1,13 @@
 ﻿using Aegis.AddressBook.Domain;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 
 namespace Aegis.AddressBook.Data
 {
-    public class DataDBContext :DbContext
+    public class AddressBookContext : DbContext
     {
-        public DataDBContext(DbContextOptions<DataDBContext> options) : base(options)
+        public AddressBookContext(DbContextOptions<AddressBookContext> options) : base(options)
         {
 
         }
@@ -23,8 +25,8 @@ namespace Aegis.AddressBook.Data
 
         public DbSet<Contact> Contacts { get; set; }
 
-        public DbSet<AddressType> AddressTypes { get; set; }
+        public DbSet<AddressType> AddressTypes { get; set; }       
 
-        public DbSet<AddressType> Addresses { get; set; }
+        public DbSet<Address> Addresses { get; set; }
     }
 }

@@ -1,7 +1,9 @@
+using Aegis.AddressBook.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,18 +18,24 @@ namespace Aegis.AddressBook.API
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddDbContext<AddressBookContext>(options =>
+               options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
+
             services.AddControllers();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Aegis.AddressBook.API", Version = "v1" });
@@ -48,7 +56,11 @@ namespace Aegis.AddressBook.API
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            //app.UseAuthorization();
+
+            app.UseCors(opt => opt.AllowAnyOrigin()
+                                  .AllowAnyHeader()
+                                  .AllowAnyMethod());
 
             app.UseEndpoints(endpoints =>
             {
