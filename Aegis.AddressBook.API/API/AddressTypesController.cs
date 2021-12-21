@@ -1,7 +1,6 @@
-﻿using Aegis.AddressBook.Data;
+﻿using Aegis.AddressBook.Application.Data;
 using Aegis.AddressBook.Domain;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,18 +10,18 @@ namespace Aegis.AddressBook.API
     [ApiController]
     public class AddressTypesController : ControllerBase
     {
-        private readonly AddressBookContext _dbContext;
+        public IAddressTypeRepository _addressTypeRepository;
 
-        public AddressTypesController(AddressBookContext dbContext)
+        public AddressTypesController(IAddressTypeRepository addressTypeRepository)
         {
-            _dbContext = dbContext;
+            _addressTypeRepository = addressTypeRepository;
         }
 
         // GET: api/<AddressTypesController>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AddressType>>> Get()
         {
-            var addressTypes = await _dbContext.AddressTypes.ToListAsync();
+            var addressTypes = await _addressTypeRepository.GetAll();
 
             return Ok(addressTypes);
         }
@@ -31,7 +30,7 @@ namespace Aegis.AddressBook.API
         [HttpGet("{id}")]
         public async Task<ActionResult<AddressType>> Get(int id)
         {
-            var addressType = await _dbContext.AddressTypes.FindAsync(id);
+            var addressType = await _addressTypeRepository.GetById(id);
 
             return Ok(addressType);
         }
@@ -40,8 +39,8 @@ namespace Aegis.AddressBook.API
         [HttpPost]
         public async Task<ActionResult<AddressType>> Post([FromBody] AddressType addressType)
         {
-            await _dbContext.AddressTypes.AddAsync(addressType);
-            await _dbContext.SaveChangesAsync();
+            _addressTypeRepository.Create(addressType);
+            await _addressTypeRepository.SaveChanges();
 
             return Ok(addressType);
         }
@@ -50,10 +49,8 @@ namespace Aegis.AddressBook.API
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] AddressType addressType)
         {
-            //ToDo: Implement map library
-            var addressTypeFromDB = await _dbContext.AddressTypes.FindAsync(id);
-            addressTypeFromDB.Name = addressType.Name;
-            await _dbContext.SaveChangesAsync();
+            _addressTypeRepository.Update(id, addressType);
+            await _addressTypeRepository.SaveChanges();
 
             return Ok();
         }
@@ -62,9 +59,8 @@ namespace Aegis.AddressBook.API
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var addressType = await _dbContext.AddressTypes.FindAsync(id);
-            _dbContext.AddressTypes.Remove(addressType);
-            await _dbContext.SaveChangesAsync();
+            await _addressTypeRepository.Remove(id);
+            await _addressTypeRepository.SaveChanges();
 
             return Ok();
         }

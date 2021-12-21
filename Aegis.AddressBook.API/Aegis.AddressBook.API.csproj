@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Aegis.AddressBook.Application\Aegis.AddressBook.Application.csproj" />
     <ProjectReference Include="..\Aegis.AddressBook.Data\Aegis.AddressBook.Data.csproj" />
   </ItemGroup>
 

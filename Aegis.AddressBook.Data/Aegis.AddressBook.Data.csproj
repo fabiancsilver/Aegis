@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Aegis.AddressBook.Application\Aegis.AddressBook.Application.csproj" />
     <ProjectReference Include="..\Aegis.AddressBook.Domain\Aegis.AddressBook.Domain.csproj" />
   </ItemGroup>
 

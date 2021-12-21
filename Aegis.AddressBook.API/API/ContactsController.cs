@@ -1,13 +1,8 @@
-﻿using Aegis.AddressBook.Data;
+﻿using Aegis.AddressBook.Application.Data;
 using Aegis.AddressBook.Domain;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Aegis.AddressBook.API
 {
@@ -15,18 +10,18 @@ namespace Aegis.AddressBook.API
     [ApiController]
     public class ContactsController : ControllerBase
     {
-        private readonly AddressBookContext _dbContext;
+        private readonly IContactRepository _contactRepository;
 
-        public ContactsController(AddressBookContext dbContext)
+        public ContactsController(IContactRepository contactRepository)
         {
-            _dbContext = dbContext;
+            _contactRepository = contactRepository;
         }
 
         // GET: api/<ContactsController>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Contact>>> Get()
         {
-            var contacts = await _dbContext.Contacts.ToListAsync();
+            var contacts = await _contactRepository.GetAll();
 
             return Ok(contacts);
         }
@@ -35,7 +30,7 @@ namespace Aegis.AddressBook.API
         [HttpGet("{id}")]
         public async Task<ActionResult<Contact>> Get(int id)
         {
-            var contact = await _dbContext.Contacts.FindAsync(id);
+            var contact = await _contactRepository.GetById(id);
 
             return Ok(contact);
         }
@@ -44,8 +39,8 @@ namespace Aegis.AddressBook.API
         [HttpPost]
         public async Task<ActionResult<Contact>> Post([FromBody] Contact contact)
         {
-            await _dbContext.Contacts.AddAsync(contact);
-            await _dbContext.SaveChangesAsync();
+            _contactRepository.Create(contact);
+            await _contactRepository.SaveChanges();
 
             return Ok(contact);
         }
@@ -54,11 +49,12 @@ namespace Aegis.AddressBook.API
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] Contact contact)
         {
-            var contactFromDB = await _dbContext.Contacts.FindAsync(id);
+            var contactFromDB = await _contactRepository.GetById(id);
 
             contactFromDB.FirstName = contact.FirstName;
             contactFromDB.LastName = contact.LastName;
-            await _dbContext.SaveChangesAsync();
+            await _contactRepository.SaveChanges();
+
             return Ok();
         }
 
@@ -66,10 +62,8 @@ namespace Aegis.AddressBook.API
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var contact = await _dbContext.Contacts.FindAsync(id);
-            _dbContext.Contacts.Remove(contact);
-
-            await _dbContext.SaveChangesAsync();
+            await _contactRepository.Remove(id);
+            await _contactRepository.SaveChanges();
 
             return Ok();
         }

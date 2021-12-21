@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aegis.AddressBook.UI", "Aeg
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aegis.AddressBook.Domain", "Aegis.AddressBook.Domain\Aegis.AddressBook.Domain.csproj", "{30C0C540-9D03-4A65-BDC2-2D5DFB9CCB6D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aegis.AddressBook.API", "Aegis.AddressBook.API\Aegis.AddressBook.API.csproj", "{EC318FF1-4E4F-447E-8ECD-72C751558697}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aegis.AddressBook.API", "Aegis.AddressBook.API\Aegis.AddressBook.API.csproj", "{EC318FF1-4E4F-447E-8ECD-72C751558697}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aegis.AddressBook.Data", "Aegis.AddressBook.Data\Aegis.AddressBook.Data.csproj", "{6807DD5D-1FE6-4D46-96F7-BF0D511770EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aegis.AddressBook.Data", "Aegis.AddressBook.Data\Aegis.AddressBook.Data.csproj", "{6807DD5D-1FE6-4D46-96F7-BF0D511770EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aegis.AddressBook.Application", "Aegis.AddressBook.Application\Aegis.AddressBook.Application.csproj", "{1123F340-9635-4509-99AB-70E7EB5868B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{6807DD5D-1FE6-4D46-96F7-BF0D511770EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6807DD5D-1FE6-4D46-96F7-BF0D511770EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6807DD5D-1FE6-4D46-96F7-BF0D511770EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1123F340-9635-4509-99AB-70E7EB5868B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1123F340-9635-4509-99AB-70E7EB5868B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1123F340-9635-4509-99AB-70E7EB5868B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1123F340-9635-4509-99AB-70E7EB5868B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

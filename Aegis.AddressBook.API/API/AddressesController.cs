@@ -1,10 +1,7 @@
-﻿using Aegis.AddressBook.Data;
+﻿using Aegis.AddressBook.Application.Data;
 using Aegis.AddressBook.Domain;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -15,18 +12,18 @@ namespace Aegis.AddressBook.API.API
     [ApiController]
     public class AddressesController : ControllerBase
     {
-        private readonly AddressBookContext _dbContext;
+        private readonly IAddressRepository _addressRepository;
 
-        public AddressesController(AddressBookContext dbContext)
+        public AddressesController(IAddressRepository addressRepository)
         {
-            _dbContext = dbContext;
+            _addressRepository = addressRepository;
         }
 
         // GET: api/<AddressesController>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Address>>> Get()
         {
-            var addresses = await _dbContext.Addresses.ToListAsync();
+            var addresses = await _addressRepository.GetAll();
 
             return Ok(addresses);
         }
@@ -35,7 +32,7 @@ namespace Aegis.AddressBook.API.API
         [HttpGet("ByContact/{contactID}")]
         public async Task<ActionResult<IEnumerable<Address>>> GetByContact(int contactID)
         {
-            var addresses = await _dbContext.Addresses.Where(a=> a.Contact.ContactID == contactID).ToListAsync();
+            var addresses = await _addressRepository.GetByContact(contactID);
 
             return Ok(addresses);
         }
@@ -44,10 +41,7 @@ namespace Aegis.AddressBook.API.API
         [HttpGet("Last10")]
         public async Task<ActionResult<IEnumerable<Address>>> GetLast10()
         {
-            var addresses = await _dbContext.Addresses
-                                            .OrderByDescending(x=>x.AddressID)
-                                            .Take(10)
-                                            .ToListAsync();
+            var addresses = await _addressRepository.GetLast10();
 
             return Ok(addresses);
         }
@@ -56,7 +50,7 @@ namespace Aegis.AddressBook.API.API
         [HttpGet("{id}")]
         public async Task<ActionResult<Address>> Get(int id)
         {
-            var address = await _dbContext.Addresses.FindAsync(id);
+            var address = await _addressRepository.GetById(id);
 
             return Ok(address);
         }
@@ -65,8 +59,8 @@ namespace Aegis.AddressBook.API.API
         [HttpPost]
         public async Task<ActionResult<Address>> Post([FromBody] Address address)
         {
-            await _dbContext.Addresses.AddAsync(address);
-            await _dbContext.SaveChangesAsync();
+            _addressRepository.Create(address);
+            await _addressRepository.SaveChanges();
 
             return Ok(address);
         }
@@ -75,15 +69,17 @@ namespace Aegis.AddressBook.API.API
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] Address address)
         {
-            var addressFromDB = await _dbContext.Addresses.FindAsync(id);
+            var addressFromDB = await _addressRepository.GetById(id);
 
+            addressFromDB.AddressTypeID = address.AddressTypeID;
             addressFromDB.Addr1 = address.Addr1;
             addressFromDB.Addr2 = address.Addr2;
+            addressFromDB.ZipCode = address.ZipCode;
             addressFromDB.City = address.City;
             addressFromDB.State = address.State;
             addressFromDB.Country = address.Country;
 
-            await _dbContext.SaveChangesAsync();
+            await _addressRepository.SaveChanges();
 
             return Ok();
         }
@@ -92,9 +88,8 @@ namespace Aegis.AddressBook.API.API
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var address = await _dbContext.Addresses.FindAsync(id);
-            _dbContext.Addresses.Remove(address);
-            await _dbContext.SaveChangesAsync();
+            await _addressRepository.Remove(id);
+            await _addressRepository.SaveChanges();
 
             return Ok();
         }
