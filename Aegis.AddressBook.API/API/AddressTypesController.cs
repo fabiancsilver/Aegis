@@ -14,7 +14,7 @@ namespace Aegis.AddressBook.API
 
         public AddressTypesController(IAddressTypeRepository addressTypeRepository)
         {
-            _addressTypeRepository = addressTypeRepository;
+            _addressTypeRepository = addressTypeRepository ?? throw new System.ArgumentNullException(nameof(addressTypeRepository));
         }
 
         // GET: api/<AddressTypesController>

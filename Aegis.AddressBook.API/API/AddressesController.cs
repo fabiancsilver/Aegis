@@ -1,5 +1,7 @@
-﻿using Aegis.AddressBook.Application.Data;
+﻿using Aegis.AddressBook.API.Models;
+using Aegis.AddressBook.Application.Data;
 using Aegis.AddressBook.Domain;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,10 +15,12 @@ namespace Aegis.AddressBook.API.API
     public class AddressesController : ControllerBase
     {
         private readonly IAddressRepository _addressRepository;
+        private readonly IMapper _mapper;        
 
-        public AddressesController(IAddressRepository addressRepository)
+        public AddressesController(IAddressRepository addressRepository, IMapper mapper)
         {
-            _addressRepository = addressRepository;
+            _addressRepository = addressRepository ?? throw new System.ArgumentNullException(nameof(addressRepository));
+            _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
         }
 
         // GET: api/<AddressesController>
@@ -67,17 +71,10 @@ namespace Aegis.AddressBook.API.API
 
         // PUT api/<AddressesController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] Address address)
+        public async Task<ActionResult> Put(int id, [FromBody] AddressViewModel addressViewModel)
         {
             var addressFromDB = await _addressRepository.GetById(id);
-
-            addressFromDB.AddressTypeID = address.AddressTypeID;
-            addressFromDB.Addr1 = address.Addr1;
-            addressFromDB.Addr2 = address.Addr2;
-            addressFromDB.ZipCode = address.ZipCode;
-            addressFromDB.City = address.City;
-            addressFromDB.State = address.State;
-            addressFromDB.Country = address.Country;
+            _mapper.Map(addressViewModel, addressFromDB);
 
             await _addressRepository.SaveChanges();
 

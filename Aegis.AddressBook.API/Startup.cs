@@ -32,6 +32,8 @@ namespace Aegis.AddressBook.API
             services.AddScoped<IAddressRepository, AddressRepository>();
             services.AddScoped<IAddressTypeRepository, AddressTypeRepository>();
 
+            services.AddAutoMapper(typeof(Startup));
+
             services.AddControllers()
                    .AddJsonOptions(options =>
                    {

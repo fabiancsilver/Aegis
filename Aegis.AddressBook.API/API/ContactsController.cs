@@ -1,5 +1,6 @@
 ﻿using Aegis.AddressBook.Application.Data;
 using Aegis.AddressBook.Domain;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,10 +12,13 @@ namespace Aegis.AddressBook.API
     public class ContactsController : ControllerBase
     {
         private readonly IContactRepository _contactRepository;
+        private readonly IMapper _mapper;
 
-        public ContactsController(IContactRepository contactRepository)
+
+        public ContactsController(IContactRepository contactRepository, IMapper mapper)
         {
-            _contactRepository = contactRepository;
+            _contactRepository = contactRepository ?? throw new System.ArgumentNullException(nameof(contactRepository));
+            _mapper = mapper ?? throw new System.ArgumentNullException(nameof(mapper));
         }
 
         // GET: api/<ContactsController>
@@ -47,12 +51,13 @@ namespace Aegis.AddressBook.API
 
         // PUT api/<ContactsController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] Contact contact)
+        public async Task<ActionResult> Put(int id, [FromBody] ContactViewModel contactViewModel)
         {
             var contactFromDB = await _contactRepository.GetById(id);
+            
+            _mapper.Map(contactViewModel, contactFromDB);
 
-            contactFromDB.FirstName = contact.FirstName;
-            contactFromDB.LastName = contact.LastName;
+            
             await _contactRepository.SaveChanges();
 
             return Ok();
