@@ -26,7 +26,7 @@ namespace Aegis.AddressBook.Domain
 
         [MaxLength(128)]
         public string Addr2 { get; set; }
-        
+
         public string ZipCode { get; set; }
 
         [MaxLength(32)]

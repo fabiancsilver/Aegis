@@ -12,16 +12,28 @@
     <mat-card-content fxLayout="column" fxLayoutGap="5px">
 
       <!--<div fxFlex="25">
-        <mat-form-field appearance="outline">
-          <mat-label for="addressId">ID</mat-label>
-          <input id="addressId"
-                 type="text"
-                 matInput
-                 formControlName="AddressID"
-                 placeholder="Address"
-                 readonly="readonly" />
-        </mat-form-field>
-      </div>-->
+    <mat-form-field appearance="outline">
+      <mat-label for="addressId">ID</mat-label>
+      <input id="addressId"
+             type="text"
+             matInput
+             formControlName="AddressID"
+             placeholder="Address"
+             readonly="readonly" />
+    </mat-form-field>
+  </div>-->
+
+      <mat-form-field appearance="outline">
+        <mat-label for="addressTypeId">Address Type</mat-label>
+        <mat-select id="addressTypeId"
+                    formControlName="AddressTypeID"
+                    placeholder="Select One">
+
+          <mat-option *ngFor="let addressType of addressTypes" [value]="addressType.AddressTypeID">
+            {{addressType.Name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label for="Addr1">Address1</mat-label>

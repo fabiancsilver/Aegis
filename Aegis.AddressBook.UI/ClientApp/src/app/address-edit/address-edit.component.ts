@@ -7,6 +7,8 @@ import { map, switchMap, tap } from 'rxjs/operators';
 import { DialogService } from '../core/dialog.service';
 
 import { Address } from '../models/address';
+import { AddressType } from '../models/address-type';
+import { AddressTypeService } from '../services/address-type.service';
 import { AddressService } from '../services/address.service';
 
 @Component({
@@ -17,10 +19,12 @@ import { AddressService } from '../services/address.service';
 export class AddressEditComponent implements OnInit {
 
   public form: FormGroup;
-  public errorMessage: string;  
+  public errorMessage: string;
+  public addressTypes: Array<AddressType>;
 
   constructor(private fb: FormBuilder,
     private serviceData: AddressService,
+    private addressTypeService: AddressTypeService,
     private dialogService: DialogService,
     private dialog: MatDialog,
     private activatedRoute: ActivatedRoute,
@@ -34,7 +38,7 @@ export class AddressEditComponent implements OnInit {
   ngOnInit() {
     this.form = this.fb.group({
       AddressID: [null, [Validators.required]],
-      AddressTypeID: [null, [Validators.required]],
+      AddressTypeID: [null, [Validators.required, Validators.min(1)]],
       ContactID: [null, [Validators.required]],
       Addr1: [null, [Validators.required, Validators.maxLength(128)]],
       Addr2: [null, [Validators.required, Validators.maxLength(128)]],
@@ -59,6 +63,8 @@ export class AddressEditComponent implements OnInit {
         }
       });
 
+    this.addressTypeService.getAll('', '', '')
+      .subscribe(result => this.addressTypes = result);
   }
 
   getItem(itemID: number): void {
@@ -119,7 +125,7 @@ export class AddressEditComponent implements OnInit {
   initialize() {
     this.form.patchValue({
       AddressID: 0,
-      AddressTypeID: 1,      
+      AddressTypeID: null,      
       Addr1: null,
       Addr2: null,
       ZipCode: null,

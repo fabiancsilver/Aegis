@@ -34,7 +34,7 @@ namespace Aegis.AddressBook.API
                 try
                 {
                     var addressBookContext = services.GetRequiredService<AddressBookContext>();
-                    
+
                     DbInitializer.Initialize(addressBookContext);
                 }
                 catch (Exception ex)

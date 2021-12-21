@@ -1,7 +1,5 @@
 ﻿using Aegis.AddressBook.Domain;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 
 namespace Aegis.AddressBook.Data
 {
@@ -25,7 +23,7 @@ namespace Aegis.AddressBook.Data
 
         public DbSet<Contact> Contacts { get; set; }
 
-        public DbSet<AddressType> AddressTypes { get; set; }       
+        public DbSet<AddressType> AddressTypes { get; set; }
 
         public DbSet<Address> Addresses { get; set; }
     }
