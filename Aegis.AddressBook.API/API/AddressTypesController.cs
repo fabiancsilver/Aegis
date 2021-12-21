@@ -38,12 +38,12 @@ namespace Aegis.AddressBook.API
 
         // POST api/<AddressTypesController>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] AddressType addressType)
+        public async Task<ActionResult<AddressType>> Post([FromBody] AddressType addressType)
         {
             await _dbContext.AddressTypes.AddAsync(addressType);
             await _dbContext.SaveChangesAsync();
 
-            return Ok();
+            return Ok(addressType);
         }
 
         // PUT api/<AddressTypesController>/5

@@ -1,6 +1,6 @@
 <mat-card>
   <mat-card-header>
-    <mat-card-title>Address Type</mat-card-title>
+    <mat-card-title>Contact</mat-card-title>
   </mat-card-header>
 
 
@@ -13,32 +13,51 @@
 
       <!--<div fxFlex="25">
         <mat-form-field appearance="outline">
-          <mat-label for="addressTypeId">ID</mat-label>
-          <input id="addressTypeId"
+          <mat-label for="contactId">ID</mat-label>
+          <input id="contactId"
                  type="text"
                  matInput
-                 formControlName="AddressTypeID"
-                 placeholder="AddressType"
+                 formControlName="ContactID"
+                 placeholder="ID"
                  readonly="readonly" />
         </mat-form-field>
       </div>-->
 
       <mat-form-field appearance="outline">
-        <mat-label for="nameId">Name</mat-label>
-        <input id="nameId"
+        <mat-label for="firstNameId">First Name</mat-label>
+        <input id="firstNameId"
                type="text"
                matInput
-               formControlName="Name"
-               placeholder="Name" />
+               formControlName="FirstName"
+               placeholder="firstName" />
 
-        <mat-error *ngIf="form.get('Name').errors?.required">
-          Name <strong>required</strong>
+        <mat-error *ngIf="form.get('FirstName').errors?.required">
+          First Name <strong>required</strong>
         </mat-error>
 
-        <mat-error *ngIf="form.get('Name').errors?.maxlength">
+        <mat-error *ngIf="form.get('FirstName').errors?.maxlength">
           Max length 128
         </mat-error>
       </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label for="lastNameId">Last Name</mat-label>
+        <input id="lastNameId"
+               type="text"
+               matInput
+               formControlName="LastName"
+               placeholder="Last Name" />
+
+        <mat-error *ngIf="form.get('LastName').errors?.required">
+          Last Name <strong>required</strong>
+        </mat-error>
+
+        <mat-error *ngIf="form.get('LastName').errors?.maxlength">
+          Max length 128
+        </mat-error>
+      </mat-form-field>
+
+
     </mat-card-content>
 
     <mat-card-actions fxLayout="row" fxLayoutGap="5px">
@@ -56,7 +75,7 @@
               style="width:100px"
               type="button"
               title="Add New"
-              [disabled]="form.get('AddressTypeID') !== null && form.get('AddressTypeID').value === 0"
+              [disabled]="form.get('ContactID') !== null && form.get('ContactID').value === 0"
               (click)="newItem()">
         Add New
       </button>
@@ -66,7 +85,7 @@
               style="width:100px"
               type="button"
               title="Go Back"
-              [routerLink]="['/address-types']">
+              [routerLink]="['/contacts']">
         Go Back
       </button>
 
@@ -76,7 +95,7 @@
               type="button"
               title="Delete"
               (click)="openDeleteDialog()"
-              [disabled]="!form.get('AddressTypeID').value">
+              [disabled]="!form.get('ContactID').value">
         Delete
       </button>
     </mat-card-actions>
@@ -87,6 +106,15 @@
 
   </form>
 </mat-card>
+
+<br />
+
+<ngContainer *ngIf="form.get('ContactID').value" >
+  <app-address-list [contactID]="form.get('ContactID').value ? form.get('ContactID').value : 0">
+
+  </app-address-list>
+</ngContainer>
+
 
 <!--<div>
   <br>Dirty: {{ form.dirty }}

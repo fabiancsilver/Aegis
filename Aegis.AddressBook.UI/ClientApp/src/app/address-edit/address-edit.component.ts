@@ -6,21 +6,21 @@ import { EMPTY, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { DialogService } from '../core/dialog.service';
 
-import { AddressType } from '../models/address-type';
-import { AddressTypeService } from '../services/address-type.service';
+import { Address } from '../models/address';
+import { AddressService } from '../services/address.service';
 
 @Component({
-  selector: 'app-address-type-edit',
-  templateUrl: './address-type-edit.component.html',
-  styleUrls: ['./address-type-edit.component.css']
+  selector: 'app-address-edit',
+  templateUrl: './address-edit.component.html',
+  styleUrls: ['./address-edit.component.css']
 })
-export class AddressTypeEditComponent implements OnInit {
+export class AddressEditComponent implements OnInit {
 
   public form: FormGroup;
-  public errorMessage: string;
+  public errorMessage: string;  
 
   constructor(private fb: FormBuilder,
-    private serviceData: AddressTypeService,
+    private serviceData: AddressService,
     private dialogService: DialogService,
     private dialog: MatDialog,
     private activatedRoute: ActivatedRoute,
@@ -33,12 +33,24 @@ export class AddressTypeEditComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.fb.group({
+      AddressID: [null, [Validators.required]],
       AddressTypeID: [null, [Validators.required]],
-      Name: [null, [Validators.required, Validators.maxLength(128)]]
+      ContactID: [null, [Validators.required]],
+      Addr1: [null, [Validators.required, Validators.maxLength(128)]],
+      Addr2: [null, [Validators.required, Validators.maxLength(128)]],
+      ZipCode: [null, [Validators.required, Validators.maxLength(128)]],      
+      City: [null, [Validators.required, Validators.maxLength(128)]],
+      State: [null, [Validators.required, Validators.maxLength(128)]],
+      Country: [null, [Validators.required, Validators.maxLength(128)]]
     });
 
     this.activatedRoute.paramMap
-      .subscribe(params => {        
+      .subscribe(params => {
+
+        this.form.patchValue({          
+          ContactID: +params.get('contactID'),          
+        });
+
         if (+params.get('id') > 0) {
           this.getItem(+params.get('id'));
         }
@@ -64,13 +76,13 @@ export class AddressTypeEditComponent implements OnInit {
     if (this.form.valid) {
       if (this.form.dirty) {
 
-        let newItem: AddressType = this.form.value;
+        let newItem: Address = this.form.value;
 
-        if (newItem.AddressTypeID === 0) {
+        if (newItem.AddressID === 0) {
           this.serviceData.insert(newItem)
             .subscribe(
-              (item: AddressType) => {
-                this.form.get('AddressTypeID').setValue(item.AddressTypeID);
+              (item: Address) => {
+                this.form.get('AddressID').setValue(item.AddressID);
                 this.onSubmitComplete();
 
               },
@@ -81,7 +93,7 @@ export class AddressTypeEditComponent implements OnInit {
               }
             );
         } else {
-          this.serviceData.update(newItem.AddressTypeID, newItem)
+          this.serviceData.update(newItem.AddressID, newItem)
             .subscribe(
               () => {
                 this.onSubmitComplete();
@@ -106,25 +118,31 @@ export class AddressTypeEditComponent implements OnInit {
 
   initialize() {
     this.form.patchValue({
-      AddressTypeID: 0,
-      Name: null
+      AddressID: 0,
+      AddressTypeID: 1,      
+      Addr1: null,
+      Addr2: null,
+      ZipCode: null,
+      City: null,
+      State: null,
+      Country: null
     });
   }
 
   openDeleteDialog(): void {
 
-    this.dialogService.confirm('Do you really want to delete this addressType')
+    this.dialogService.confirm('Do you really want to delete this Address')
       .pipe(
         switchMap((result) => {
           if (result === true) {
-            return this.serviceData.delete(+this.form.get('AddressTypeID').value)
+            return this.serviceData.delete(+this.form.get('AddressID').value)
           }
           else {
             return of({});
           }
         }))
       .subscribe(
-        () => this.route.navigate(['/address-types']));
+        () => this.route.navigateByUrl(`/contacts/${this.form.get('ContactID').value}`));
   }
 
   deleteItem(itemID: number) {
@@ -132,11 +150,11 @@ export class AddressTypeEditComponent implements OnInit {
     if (itemID > 0) {
       this.serviceData.delete(itemID)
         .subscribe(
-          (item: AddressType) => {
-            this.route.navigateByUrl('/address-types')
+          (item: Address) => {
+            this.route.navigateByUrl(`/contacts/${this.form.get('ContactID').value}`)
           },
           (error: any) => {
-            this.errorMessage = <any> error;
+            this.errorMessage = <any>error;
           }
         );
     }
@@ -150,17 +168,16 @@ export class AddressTypeEditComponent implements OnInit {
     this.form.markAsPristine();
   }
 
-  displayItem(item: AddressType): void {
-
-    if (this.form) {
-      this.form.reset();
-    }
-
+  displayItem(item: Address): void {
     this.form.patchValue({
-      AddressTypeID: item.AddressTypeID,
-      Name: item.Name ? item.Name : null
+      AddressID: item.AddressID,
+      AddressTypeID: item.AddressTypeID,      
+      Addr1: item.Addr1 ? item.Addr1 : null,
+      Addr2: item.Addr2 ? item.Addr2 : null,
+      ZipCode: item.ZipCode ? item.ZipCode : null,
+      City: item.City ? item.City : null,
+      State: item.State ? item.State : null,
+      Country: item.Country ? item.Country : null,
     });
   }
-
-
 }

@@ -8,6 +8,15 @@ namespace Aegis.AddressBook.Domain
         [Key]
         public int AddressID { get; set; }
 
+        [Required]
+        public int ContactID { get; set; }
+
+        [ForeignKey("ContactID")]
+        public Contact Contact { get; set; }
+
+        [Required]
+        public int AddressTypeID { get; set; }
+
         [ForeignKey("AddressTypeID")]
         public AddressType AddressType { get; set; }
 

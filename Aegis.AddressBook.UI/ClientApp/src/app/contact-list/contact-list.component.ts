@@ -6,31 +6,32 @@ import { MatTable } from '@angular/material/table';
 import { merge } from 'rxjs';
 import { startWith, switchMap } from 'rxjs/operators';
 
-import { AddressType } from '../models/address-type';
-import { AddressTypeService } from '../services/address-type.service';
+import { Contact } from '../models/contact';
+import { ContactService } from '../services/contact.service';
 
 @Component({
-  selector: 'app-address-type-list',
-  templateUrl: './address-type-list.component.html',
-  styleUrls: ['./address-type-list.component.css']
+  selector: 'app-contact-list',
+  templateUrl: './contact-list.component.html',
+  styleUrls: ['./contact-list.component.css']
 })
-export class AddressTypeListComponent implements OnInit {
+export class ContactListComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild(MatTable, { static: false }) table: MatTable<AddressType>;
+  @ViewChild(MatTable, { static: false }) table: MatTable<Contact>;
 
   filterControl = new FormControl();
 
-  public dataSource: AddressType[] = new Array<AddressType>();
+  public dataSource: Contact[] = new Array<Contact>();
 
   displayedColumns = [
-    'AddressTypeID',
-    'Name',
+    'ContactID',
+    'FirstName',
+    'LastName',
     'Command1'
   ];
 
-  constructor(private dataService: AddressTypeService) {
+  constructor(private dataService: ContactService) {
 
   }
 

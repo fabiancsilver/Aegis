@@ -25,7 +25,7 @@ export class AddressTypeService implements BaseService<AddressType> {
       Direction: direction
     };
 
-    let url: string = `${this.baseUrl}/?sortBy=${sortBy}&direction=${direction}&filterBy=${filterBy}`;
+    let url: string = `${this.baseUrl}`;
 
     return this.http.get<AddressType[]>(url);
   }

@@ -6,21 +6,21 @@ import { EMPTY, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { DialogService } from '../core/dialog.service';
 
-import { AddressType } from '../models/address-type';
-import { AddressTypeService } from '../services/address-type.service';
+import { Contact } from '../models/contact';
+import { ContactService } from '../services/contact.service';
 
 @Component({
-  selector: 'app-address-type-edit',
-  templateUrl: './address-type-edit.component.html',
-  styleUrls: ['./address-type-edit.component.css']
+  selector: 'app-contact-edit',
+  templateUrl: './contact-edit.component.html',
+  styleUrls: ['./contact-edit.component.css']
 })
-export class AddressTypeEditComponent implements OnInit {
+export class ContactEditComponent implements OnInit {
 
   public form: FormGroup;
   public errorMessage: string;
 
   constructor(private fb: FormBuilder,
-    private serviceData: AddressTypeService,
+    private serviceData: ContactService,
     private dialogService: DialogService,
     private dialog: MatDialog,
     private activatedRoute: ActivatedRoute,
@@ -33,8 +33,9 @@ export class AddressTypeEditComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.fb.group({
-      AddressTypeID: [null, [Validators.required]],
-      Name: [null, [Validators.required, Validators.maxLength(128)]]
+      ContactID: [null, [Validators.required]],
+      FirstName: [null, [Validators.required, Validators.maxLength(128)]],
+      LastName: [null, [Validators.required, Validators.maxLength(128)]]
     });
 
     this.activatedRoute.paramMap
@@ -64,13 +65,13 @@ export class AddressTypeEditComponent implements OnInit {
     if (this.form.valid) {
       if (this.form.dirty) {
 
-        let newItem: AddressType = this.form.value;
+        let newItem: Contact = this.form.value;
 
-        if (newItem.AddressTypeID === 0) {
+        if (newItem.ContactID === 0) {
           this.serviceData.insert(newItem)
             .subscribe(
-              (item: AddressType) => {
-                this.form.get('AddressTypeID').setValue(item.AddressTypeID);
+              (item: Contact) => {
+                this.form.get('ContactID').setValue(item.ContactID);
                 this.onSubmitComplete();
 
               },
@@ -81,7 +82,7 @@ export class AddressTypeEditComponent implements OnInit {
               }
             );
         } else {
-          this.serviceData.update(newItem.AddressTypeID, newItem)
+          this.serviceData.update(newItem.ContactID, newItem)
             .subscribe(
               () => {
                 this.onSubmitComplete();
@@ -106,25 +107,26 @@ export class AddressTypeEditComponent implements OnInit {
 
   initialize() {
     this.form.patchValue({
-      AddressTypeID: 0,
-      Name: null
+      ContactID: 0,
+      FirstName: null,
+      LastName: null,
     });
   }
 
   openDeleteDialog(): void {
 
-    this.dialogService.confirm('Do you really want to delete this addressType')
+    this.dialogService.confirm('Do you really want to delete this contact')
       .pipe(
         switchMap((result) => {
           if (result === true) {
-            return this.serviceData.delete(+this.form.get('AddressTypeID').value)
+            return this.serviceData.delete(+this.form.get('ContactID').value)
           }
           else {
             return of({});
           }
         }))
       .subscribe(
-        () => this.route.navigate(['/address-types']));
+        () => this.route.navigate(['/contacts']));
   }
 
   deleteItem(itemID: number) {
@@ -132,11 +134,11 @@ export class AddressTypeEditComponent implements OnInit {
     if (itemID > 0) {
       this.serviceData.delete(itemID)
         .subscribe(
-          (item: AddressType) => {
-            this.route.navigateByUrl('/address-types')
+          (item: Contact) => {
+            this.route.navigateByUrl('/contacts')
           },
           (error: any) => {
-            this.errorMessage = <any> error;
+            this.errorMessage = <any>error;
           }
         );
     }
@@ -150,15 +152,16 @@ export class AddressTypeEditComponent implements OnInit {
     this.form.markAsPristine();
   }
 
-  displayItem(item: AddressType): void {
+  displayItem(item: Contact): void {
 
     if (this.form) {
       this.form.reset();
     }
 
     this.form.patchValue({
-      AddressTypeID: item.AddressTypeID,
-      Name: item.Name ? item.Name : null
+      ContactID: item.ContactID,
+      FirstName: item.FirstName ? item.FirstName : null,
+      LastName: item.LastName ? item.LastName : null,
     });
   }
 
