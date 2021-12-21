@@ -34,7 +34,11 @@ namespace Aegis.AddressBook.API
             services.AddDbContext<AddressBookContext>(options =>
                options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddControllers();
+            services.AddControllers()
+                   .AddJsonOptions(options =>
+                   {
+                       options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                   });
 
             services.AddSwaggerGen(c =>
             {

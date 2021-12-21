@@ -31,6 +31,27 @@ namespace Aegis.AddressBook.API.API
             return Ok(addresses);
         }
 
+        // GET: api/<AddressesController>
+        [HttpGet("ByContact/{contactID}")]
+        public async Task<ActionResult<IEnumerable<Address>>> GetByContact(int contactID)
+        {
+            var addresses = await _dbContext.Addresses.Where(a=> a.Contact.ContactID == contactID).ToListAsync();
+
+            return Ok(addresses);
+        }
+
+        // GET: api/<AddressesController>
+        [HttpGet("Last10")]
+        public async Task<ActionResult<IEnumerable<Address>>> GetLast10()
+        {
+            var addresses = await _dbContext.Addresses
+                                            .OrderByDescending(x=>x.AddressID)
+                                            .Take(10)
+                                            .ToListAsync();
+
+            return Ok(addresses);
+        }
+
         // GET api/<AddressesController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Address>> Get(int id)
@@ -42,12 +63,12 @@ namespace Aegis.AddressBook.API.API
 
         // POST api/<AddressesController>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] Address address)
+        public async Task<ActionResult<Address>> Post([FromBody] Address address)
         {
             await _dbContext.Addresses.AddAsync(address);
             await _dbContext.SaveChangesAsync();
 
-            return Ok();
+            return Ok(address);
         }
 
         // PUT api/<AddressesController>/5

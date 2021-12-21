@@ -1,0 +1,96 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Address Type</mat-card-title>
+  </mat-card-header>
+
+
+  <form novalidate
+        autocomplete="off"
+        (ngSubmit)="submit()"
+        [formGroup]="form">
+
+    <mat-card-content fxLayout="column" fxLayoutGap="5px">
+
+      <!--<div fxFlex="25">
+        <mat-form-field appearance="outline">
+          <mat-label for="addressTypeId">ID</mat-label>
+          <input id="addressTypeId"
+                 type="text"
+                 matInput
+                 formControlName="AddressTypeID"
+                 placeholder="AddressType"
+                 readonly="readonly" />
+        </mat-form-field>
+      </div>-->
+
+      <mat-form-field appearance="outline">
+        <mat-label for="nameId">Name</mat-label>
+        <input id="nameId"
+               type="text"
+               matInput
+               formControlName="Name"
+               placeholder="Name" />
+
+        <mat-error *ngIf="form.get('Name').errors?.required">
+          Name <strong>required</strong>
+        </mat-error>
+
+        <mat-error *ngIf="form.get('Name').errors?.maxlength">
+          Max length 128
+        </mat-error>
+      </mat-form-field>
+    </mat-card-content>
+
+    <mat-card-actions fxLayout="row" fxLayoutGap="5px">
+      <button mat-raised-button
+              color="primary"
+              style="width:100px"
+              type="submit"
+              [title]="form.valid && form.dirty ? 'Valid Data' : 'Invalid Data'"
+              [disabled]="!form.valid || !form.dirty">
+        Save
+      </button>
+
+      <button mat-raised-button
+              color="accent"
+              style="width:100px"
+              type="button"
+              title="Add New"
+              [disabled]="form.get('AddressTypeID') !== null && form.get('AddressTypeID').value === 0"
+              (click)="newItem()">
+        Add New
+      </button>
+
+      <button mat-raised-button
+              color=""
+              style="width:100px"
+              type="button"
+              title="Go Back"
+              [routerLink]="['/address-types']">
+        Go Back
+      </button>
+
+      <button mat-raised-button
+              color="warn"
+              style="width:100px"
+              type="button"
+              title="Delete"
+              (click)="openDeleteDialog()"
+              [disabled]="!form.get('AddressTypeID').value">
+        Delete
+      </button>
+    </mat-card-actions>
+
+    <mat-card-footer fxLayout="row" *ngIf="errorMessage">
+      {{errorMessage}}
+    </mat-card-footer>
+
+  </form>
+</mat-card>
+
+<!--<div>
+  <br>Dirty: {{ form.dirty }}
+  <br>Touched: {{ form.touched }}
+  <br>Valid: {{ form.valid }}
+  <br>Value: {{ form.value | json }}
+</div>-->

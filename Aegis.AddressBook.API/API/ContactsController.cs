@@ -42,12 +42,12 @@ namespace Aegis.AddressBook.API
 
         // POST api/<ContactsController>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] Contact contact)
+        public async Task<ActionResult<Contact>> Post([FromBody] Contact contact)
         {
             await _dbContext.Contacts.AddAsync(contact);
             await _dbContext.SaveChangesAsync();
 
-            return Ok();
+            return Ok(contact);
         }
 
         // PUT api/<ContactsController>/5
@@ -57,8 +57,8 @@ namespace Aegis.AddressBook.API
             var contactFromDB = await _dbContext.Contacts.FindAsync(id);
 
             contactFromDB.FirstName = contact.FirstName;
-            contactFromDB.LastName = contact.LastName;            
-
+            contactFromDB.LastName = contact.LastName;
+            await _dbContext.SaveChangesAsync();
             return Ok();
         }
 

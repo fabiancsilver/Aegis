@@ -1,0 +1,124 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Contact</mat-card-title>
+  </mat-card-header>
+
+
+  <form novalidate
+        autocomplete="off"
+        (ngSubmit)="submit()"
+        [formGroup]="form">
+
+    <mat-card-content fxLayout="column" fxLayoutGap="5px">
+
+      <!--<div fxFlex="25">
+        <mat-form-field appearance="outline">
+          <mat-label for="contactId">ID</mat-label>
+          <input id="contactId"
+                 type="text"
+                 matInput
+                 formControlName="ContactID"
+                 placeholder="ID"
+                 readonly="readonly" />
+        </mat-form-field>
+      </div>-->
+
+      <mat-form-field appearance="outline">
+        <mat-label for="firstNameId">First Name</mat-label>
+        <input id="firstNameId"
+               type="text"
+               matInput
+               formControlName="FirstName"
+               placeholder="firstName" />
+
+        <mat-error *ngIf="form.get('FirstName').errors?.required">
+          First Name <strong>required</strong>
+        </mat-error>
+
+        <mat-error *ngIf="form.get('FirstName').errors?.maxlength">
+          Max length 128
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label for="lastNameId">Last Name</mat-label>
+        <input id="lastNameId"
+               type="text"
+               matInput
+               formControlName="LastName"
+               placeholder="Last Name" />
+
+        <mat-error *ngIf="form.get('LastName').errors?.required">
+          Last Name <strong>required</strong>
+        </mat-error>
+
+        <mat-error *ngIf="form.get('LastName').errors?.maxlength">
+          Max length 128
+        </mat-error>
+      </mat-form-field>
+
+
+    </mat-card-content>
+
+    <mat-card-actions fxLayout="row" fxLayoutGap="5px">
+      <button mat-raised-button
+              color="primary"
+              style="width:100px"
+              type="submit"
+              [title]="form.valid && form.dirty ? 'Valid Data' : 'Invalid Data'"
+              [disabled]="!form.valid || !form.dirty">
+        Save
+      </button>
+
+      <button mat-raised-button
+              color="accent"
+              style="width:100px"
+              type="button"
+              title="Add New"
+              [disabled]="form.get('ContactID') !== null && form.get('ContactID').value === 0"
+              (click)="newItem()">
+        Add New
+      </button>
+
+      <button mat-raised-button
+              color=""
+              style="width:100px"
+              type="button"
+              title="Go Back"
+              [routerLink]="['/contacts']">
+        Go Back
+      </button>
+
+      <button mat-raised-button
+              color="warn"
+              style="width:100px"
+              type="button"
+              title="Delete"
+              (click)="openDeleteDialog()"
+              [disabled]="!form.get('ContactID').value">
+        Delete
+      </button>
+    </mat-card-actions>
+
+    <mat-card-footer fxLayout="row" *ngIf="errorMessage">
+      {{errorMessage}}
+    </mat-card-footer>
+
+  </form>
+</mat-card>
+
+<br />
+
+<ngContainer *ngIf="form.get('ContactID').value" >
+  <app-address-list [contactID]="form.get('ContactID').value ? form.get('ContactID').value : 0">
+
+  </app-address-list>
+</ngContainer>
+
+
+<!--<div>
+  <br>Dirty: {{ form.dirty }}
+  <br>Touched: {{ form.touched }}
+  <br>Valid: {{ form.valid }}
+  <br>Value: {{ form.value | json }}
+</div>-->

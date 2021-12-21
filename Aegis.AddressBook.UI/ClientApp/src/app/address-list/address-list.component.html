@@ -1,0 +1,83 @@
+
+
+
+<mat-action-row matSuffix fxLayoutGap="5px">
+  <h3>
+    Address List <a [routerLink]="['/addresses',0,contactID]"
+                    mat-mini-fab aria-label="Add"
+                    color="accent">
+      <mat-icon>add</mat-icon>
+    </a>
+  </h3>
+
+</mat-action-row>
+
+<div class="mat-elevation-z8">
+
+  <table mat-table
+         [dataSource]="dataSource"
+         class="full-width-table"
+         matSort
+         matSortActive="Addr1"
+         matSortDisableClear
+         matSortDirection="asc"
+         aria-label="Elements">
+
+    <ng-container matColumnDef="AddressID">
+      <th mat-header-cell *matHeaderCellDef>Id</th>
+      <td mat-cell *matCellDef="let row">{{row.AddressID}}</td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="Addr1">
+      <th mat-header-cell *matHeaderCellDef>Address 1</th>
+      <td mat-cell *matCellDef="let row">{{row.Addr1}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Addr2">
+      <th mat-header-cell *matHeaderCellDef>Address 2</th>
+      <td mat-cell *matCellDef="let row">{{row.Addr2}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="ZipCode">
+      <th mat-header-cell *matHeaderCellDef>ZipCode</th>
+      <td mat-cell *matCellDef="let row">{{row.ZipCode}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="City">
+      <th mat-header-cell *matHeaderCellDef>City</th>
+      <td mat-cell *matCellDef="let row">{{row.City}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="State">
+      <th mat-header-cell *matHeaderCellDef>State</th>
+      <td mat-cell *matCellDef="let row">{{row.State}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Country">
+      <th mat-header-cell *matHeaderCellDef>Country</th>
+      <td mat-cell *matCellDef="let row">{{row.Country}}</td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="Command1">
+      <th mat-header-cell *matHeaderCellDef> Edit </th>
+      <td mat-cell *matCellDef="let row">
+        <a mat-icon-button [routerLink]="['/addresses', row.AddressID, row.ContactID]" color="accent">
+          <mat-icon>edit</mat-icon>
+        </a>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator #paginator
+                 [length]="dataSource?.length"
+                 [pageIndex]="0"
+                 [pageSize]="50"
+                 [pageSizeOptions]="[25, 50, 100, 250]"
+                 showFirstLastButtons>
+  </mat-paginator>
+</div>
